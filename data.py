@@ -2,6 +2,8 @@ import scipy.io
 import numpy as np
 import torch
 import torchvision
+import torchvision.transforms as transforms
+from PIL import Image
 
 class Dataset(torch.utils.data.Dataset):
     """
@@ -13,7 +15,7 @@ class Dataset(torch.utils.data.Dataset):
     split : {'train', 'test'}
     """
     def __init__(self, split):
-        self.indices = np.genfromtxt('data/lspset_dataset/{split}_indices.csv', delimiter=",").astype(int)
+        self.indices = np.genfromtxt(f'data/lspset_dataset/{split}_indices.csv', delimiter=",").astype(int)
         data = torch.from_numpy(scipy.io.loadmat('data/lspset_dataset/joints.mat')['joints'])
         data = data.permute(2, 0, 1)
         self.joints = data[:, :, :2].reshape(-1, 28)
@@ -41,7 +43,7 @@ class Dataset(torch.utils.data.Dataset):
                   'occlusion_mask': self.occlusion_mask[index, :]}
         return sample
 
-trainloader = torch.utils.data.DataLoader(Dataset('train'), batch_size=32,
-                                          shuffle=True, num_workers=2)
-testloader = torch.utils.data.DataLoader(Dataset('test'), batch_size=32,
-                                          shuffle=True, num_workers=2)
+# trainloader = torch.utils.data.DataLoader(Dataset('train'), batch_size=32,
+#                                           shuffle=True, num_workers=2)
+# testloader = torch.utils.data.DataLoader(Dataset('test'), batch_size=32,
+#                                           shuffle=True, num_workers=2)
